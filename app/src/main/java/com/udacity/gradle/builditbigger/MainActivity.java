@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.MobileAds;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -14,6 +16,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialize adMob
+        MobileAds.initialize(getApplicationContext(),getResources().getString(R.string.banner_ad_unit_id));
     }
 
 

@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.udacity.gradle.javalib.Joker;
 
 
 /**
@@ -31,6 +34,12 @@ public class MainActivityFragment extends Fragment {
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         mAdView.loadAd(adRequest);
+
         return root;
+    }
+
+    public void tellJoke(View view){
+        Joker joker = new Joker();
+        Toast.makeText(view.getContext(), joker.getJoke(), Toast.LENGTH_SHORT).show();
     }
 }
