@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.udacity.gradle.javalib.Joker;
 
+import com.udacity.gradle.Joker;
 
 /**
  * A placeholder fragment containing a simple view.
