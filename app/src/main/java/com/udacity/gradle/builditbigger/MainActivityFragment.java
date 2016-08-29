@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-import com.udacity.gradle.Joker;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,11 +34,18 @@ public class MainActivityFragment extends Fragment {
                 .build();
         mAdView.loadAd(adRequest);
 
+        Button button = (Button) root.findViewById(R.id.button_joke);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tellJoke();
+            }
+        });
+
         return root;
     }
 
-    public void tellJoke(View view){
-
+    public void tellJoke() {
         JokeAsyncTask task = new JokeAsyncTask();
         task.execute(getContext());
     }

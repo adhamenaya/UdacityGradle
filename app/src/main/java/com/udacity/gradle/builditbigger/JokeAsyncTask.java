@@ -1,6 +1,8 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -22,6 +24,7 @@ public class JokeAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected String doInBackground(Context... contexts) {
+        mContext = contexts[0];
 
         if (mJokeApi == null) {
             JokeApi.Builder builder = new JokeApi.Builder(AndroidHttp.newCompatibleTransport(),
@@ -43,10 +46,13 @@ public class JokeAsyncTask extends AsyncTask<Context, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(String jokeString) {
+        super.onPostExecute(jokeString);
 
-        Log.d("Joke", s);
-
+        if (mContext != null) {
+            Intent intent = new Intent("com.udacity.gradle.androidjokes.DisplayJokeActivity");
+            intent.putExtra("joke",jokeString);
+            ((Activity) mContext).startActivity(intent);
+        }
     }
 }

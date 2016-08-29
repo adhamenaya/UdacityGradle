@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.0-beta1'
     compile 'com.google.android.gms:play-services:9.0.2'
     compile project(path: ':backend', configuration: 'android-endpoints')
-    compile project(path: ':javaJokes')
+    compile project(path: ':androidJokes')
 }
 
 apply plugin: 'com.google.gms.google-services'
