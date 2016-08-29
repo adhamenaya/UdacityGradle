@@ -13,22 +13,27 @@ import com.udacity.gradle.Joker;
 
 import javax.inject.Named;
 
-/** An endpoint class we are exposing */
+/**
+ * An endpoint class we are exposing
+ */
 @Api(
-  name = "jokeApi",
-  version = "v1",
-  namespace = @ApiNamespace(
-    ownerDomain = "backend.gradle.udacity.com",
-    ownerName = "adhamenaya",
-    packagePath=""
-  )
+        name = "jokeApi",
+        version = "v1",
+        namespace = @ApiNamespace(
+                ownerDomain = "backend.udacity.com",
+                ownerName = "adhamenaya",
+                packagePath = ""
+        )
 )
 public class MyEndpoint {
 
-    /** A simple endpoint method that takes a name and says Hi back */
+    /**
+     * A simple endpoint method that takes a name and says Hi back
+     */
     @ApiMethod(name = "tellJoke")
     public Joke tellJoke() {
         Joke response = new Joke();
+
 
         // Get joke from java lib
         Joker joker = new Joker();

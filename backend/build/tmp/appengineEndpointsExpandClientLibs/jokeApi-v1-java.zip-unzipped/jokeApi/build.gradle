@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 
-group = 'com.udacity.gradle.backend'
+group = 'com.udacity.backend'
 archivesBaseName = 'jokeApi'
 version = 'v1-1.22.0-SNAPSHOT'
 

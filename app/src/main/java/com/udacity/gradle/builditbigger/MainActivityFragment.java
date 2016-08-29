@@ -39,7 +39,8 @@ public class MainActivityFragment extends Fragment {
     }
 
     public void tellJoke(View view){
-        Joker joker = new Joker();
-        Toast.makeText(view.getContext(), joker.getJoke(), Toast.LENGTH_SHORT).show();
+
+        JokeAsyncTask task = new JokeAsyncTask();
+        task.execute(getContext());
     }
 }
