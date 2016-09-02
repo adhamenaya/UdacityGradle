@@ -1,16 +1,23 @@
 package com.udacity.gradle.builditbigger;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 
 public class MainActivity extends ActionBarActivity {
+    InterstitialAd mInterstitialAd;
+    String jokeString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +25,21 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         //Initialize adMob
-        MobileAds.initialize(getApplicationContext(),getResources().getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
+
+        // Full screen ad
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id));
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                requestNewInterstitial();
+                //     startJokeActivity();
+            }
+        });
+
+        requestNewInterstitial();
     }
 
 
@@ -43,10 +64,29 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-/*
-    public void tellJoke(View view){
-     Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
-}
-*/
 
+    public void doAfterJokeLoad(Context context, String jokeString) {
+        this.jokeString = jokeString;
+
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+            mInterstitialAd.show();
+        else
+            startJokeActivity(context, jokeString);
+
+    }
+
+    private void startJokeActivity(Context context, String jokeString) {
+        if (jokeString.equals("")) return;
+        Intent intent = new Intent("com.udacity.gradle.androidjokes.DisplayJokeActivity");
+        intent.putExtra("joke", jokeString);
+        ((Activity) context).startActivity(intent);
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
 }

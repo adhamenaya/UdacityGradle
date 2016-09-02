@@ -1,10 +1,11 @@
 package com.udacity.gradle.builditbigger;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Pair;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -17,14 +18,21 @@ import java.io.IOException;
 /**
  * Created by AENAYA on 20/08/2016.
  */
-public class JokeAsyncTask extends AsyncTask<Context, Void, String> {
+public class JokeAsyncTask extends AsyncTask<Pair<Context, ProgressBar>, Void, String> {
 
     private static JokeApi mJokeApi = null;
     private Context mContext;
+    private ProgressBar mProgressbar;
+
+    public JokeAsyncTask() {
+        if (mProgressbar != null)
+            mProgressbar.setVisibility(View.VISIBLE);
+    }
 
     @Override
-    protected String doInBackground(Context... contexts) {
-        mContext = contexts[0];
+    protected String doInBackground(Pair<Context, ProgressBar>... pairs) {
+        mContext = pairs[0].first;
+        mProgressbar = pairs[0].second;
 
         if (mJokeApi == null) {
             JokeApi.Builder builder = new JokeApi.Builder(AndroidHttp.newCompatibleTransport(),
@@ -40,7 +48,7 @@ public class JokeAsyncTask extends AsyncTask<Context, Void, String> {
         }
         try {
             return mJokeApi.tellJoke().execute().getJokeText();
-        } catch (IOException ioex) {
+        } catch (IOException e) {
             return "";
         }
     }
@@ -48,11 +56,12 @@ public class JokeAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String jokeString) {
         super.onPostExecute(jokeString);
+        if (mProgressbar != null)
+            mProgressbar.setVisibility(View.GONE);
 
-        if (mContext != null) {
-            Intent intent = new Intent("com.udacity.gradle.androidjokes.DisplayJokeActivity");
-            intent.putExtra("joke",jokeString);
-            ((Activity) mContext).startActivity(intent);
-        }
+        Log.d("--joke",jokeString);
+
+        new MainActivity().doAfterJokeLoad(mContext, jokeString);
+
     }
 }
