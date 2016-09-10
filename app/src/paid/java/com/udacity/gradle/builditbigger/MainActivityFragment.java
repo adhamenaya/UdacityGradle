@@ -45,6 +45,7 @@ public class MainActivityFragment extends Fragment {
 
     public void tellJoke() {
         JokeAsyncTask task = new JokeAsyncTask();
+        if(mProgressBar != null) mProgressBar.setVisibility(View.VISIBLE);
         task.execute(new Pair<Context, ProgressBar>(getContext(), mProgressBar));
     }
 }

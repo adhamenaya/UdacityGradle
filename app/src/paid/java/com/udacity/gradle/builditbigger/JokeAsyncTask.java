@@ -24,11 +24,6 @@ public class JokeAsyncTask extends AsyncTask<Pair<Context, ProgressBar>, Void, S
     private Context mContext;
     private ProgressBar mProgressbar;
 
-    public JokeAsyncTask() {
-        if (mProgressbar != null)
-            mProgressbar.setVisibility(View.VISIBLE);
-    }
-
     @Override
     protected String doInBackground(Pair<Context, ProgressBar>... pairs) {
         mContext = pairs[0].first;
@@ -58,9 +53,6 @@ public class JokeAsyncTask extends AsyncTask<Pair<Context, ProgressBar>, Void, S
         super.onPostExecute(jokeString);
         if (mProgressbar != null)
             mProgressbar.setVisibility(View.GONE);
-
-        Log.d("--joke",jokeString);
-
         new MainActivity().doAfterJokeLoad(mContext, jokeString);
 
     }

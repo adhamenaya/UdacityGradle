@@ -18,20 +18,15 @@ import java.io.IOException;
 /**
  * Created by AENAYA on 20/08/2016.
  */
-public class JokeAsyncTask extends AsyncTask<Pair<Context, ProgressBar>, Void, String> {
+public class JokeAsyncTask extends AsyncTask<Pair<MainActivityFragment.Callback, ProgressBar>, Void, String> {
 
     private static JokeApi mJokeApi = null;
-    private Context mContext;
+    private MainActivityFragment.Callback mCallback;
     private ProgressBar mProgressbar;
 
-    public JokeAsyncTask() {
-        if (mProgressbar != null)
-            mProgressbar.setVisibility(View.VISIBLE);
-    }
-
     @Override
-    protected String doInBackground(Pair<Context, ProgressBar>... pairs) {
-        mContext = pairs[0].first;
+    protected String doInBackground(Pair<MainActivityFragment.Callback, ProgressBar>... pairs) {
+        mCallback = pairs[0].first;
         mProgressbar = pairs[0].second;
 
         if (mJokeApi == null) {
@@ -59,9 +54,6 @@ public class JokeAsyncTask extends AsyncTask<Pair<Context, ProgressBar>, Void, S
         if (mProgressbar != null)
             mProgressbar.setVisibility(View.GONE);
 
-        Log.d("--joke",jokeString);
-
-        new MainActivity().doAfterJokeLoad(mContext, jokeString);
-
+        mCallback.showJokeOrAd(jokeString);
     }
 }

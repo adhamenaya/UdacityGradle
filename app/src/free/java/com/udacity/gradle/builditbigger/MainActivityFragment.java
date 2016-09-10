@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telecom.Call;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class MainActivityFragment extends Fragment {
     private ProgressBar mProgressBar;
     private Button mButton;
 
+    private Callback mCallback;
+
     public MainActivityFragment() {
     }
 
@@ -47,6 +50,7 @@ public class MainActivityFragment extends Fragment {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
+
         mAdView.loadAd(adRequest);
 
         mButton = (Button) root.findViewById(R.id.button_joke);
@@ -64,7 +68,19 @@ public class MainActivityFragment extends Fragment {
 
     public void tellJoke() {
         JokeAsyncTask task = new JokeAsyncTask();
-        task.execute(new Pair<Context, ProgressBar>(getContext(),mProgressBar));
+        if (mProgressBar != null) mProgressBar.setVisibility(View.VISIBLE);
+        task.execute(new Pair<Callback, ProgressBar>(mCallback, mProgressBar));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mCallback = (MainActivity) getActivity();
+    }
+
+    public interface Callback {
+        void showJokeOrAd(String joke);
     }
 }
 

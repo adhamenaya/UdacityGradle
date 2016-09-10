@@ -15,7 +15,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements MainActivityFragment.Callback {
     InterstitialAd mInterstitialAd;
     String jokeString = "";
 
@@ -35,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
             public void onAdClosed() {
                 super.onAdClosed();
                 requestNewInterstitial();
-                //     startJokeActivity();
+                startJokeActivity(getApplicationContext(), jokeString);
             }
         });
 
@@ -65,28 +65,29 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void doAfterJokeLoad(Context context, String jokeString) {
-        this.jokeString = jokeString;
-
-        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-            mInterstitialAd.show();
-        else
-            startJokeActivity(context, jokeString);
-
-    }
-
     private void startJokeActivity(Context context, String jokeString) {
         if (jokeString.equals("")) return;
         Intent intent = new Intent("com.udacity.gradle.androidjokes.DisplayJokeActivity");
         intent.putExtra("joke", jokeString);
-        ((Activity) context).startActivity(intent);
+        startActivity(intent);
     }
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("CBBB6DDE22934C86364EBBDF01A3BDFD")
                 .build();
 
         mInterstitialAd.loadAd(adRequest);
+    }
+
+    public void showJokeOrAd(String jokeString) {
+        this.jokeString = jokeString;
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+            Log.d("show ad", "s------------");
+        } else {
+            startJokeActivity(getApplicationContext(), jokeString);
+        }
     }
 }

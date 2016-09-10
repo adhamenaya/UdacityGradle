@@ -18,3 +18,23 @@ allprojects {
         jcenter()
     }
 }
+
+task runAppEngine(dependsOn: getTasksByName("appenginRun",true)) {
+    project(":backend").afterEvaluate {
+        backend -> backend.extensions.appengine.daemon = true
+    }
+    doLast {
+        println "GCE started ..."
+    }
+}
+
+task runConnectedTest(dependsOn: getTasksByName("connectedCheck",true)) {
+    project(":app").afterEvaluate {
+        backend -> backend.extensions.appengine.daemon = true
+    }
+    doLast {
+        println "Run android test..."
+    }
+}
+runAppEngine.finalizedBy runConnectedTest
+runConnectedTest.finalizedBy ":backend:appengineStop"

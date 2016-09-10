@@ -9,37 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-
 
 public class MainActivity extends ActionBarActivity {
-    InterstitialAd mInterstitialAd;
     String jokeString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Initialize adMob
-        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.banner_ad_unit_id));
-
-        // Full screen ad
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.banner_ad_unit_id));
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                requestNewInterstitial();
-                //     startJokeActivity();
-            }
-        });
-
-        requestNewInterstitial();
     }
 
 
@@ -68,10 +45,7 @@ public class MainActivity extends ActionBarActivity {
     public void doAfterJokeLoad(Context context, String jokeString) {
         this.jokeString = jokeString;
 
-        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-            mInterstitialAd.show();
-        else
-            startJokeActivity(context, jokeString);
+        startJokeActivity(context, jokeString);
 
     }
 
@@ -82,11 +56,4 @@ public class MainActivity extends ActionBarActivity {
         ((Activity) context).startActivity(intent);
     }
 
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-
-        mInterstitialAd.loadAd(adRequest);
-    }
 }
